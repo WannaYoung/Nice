@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8150" systemVersion="15A204g" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" initialViewController="01J-lp-oVM">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8122"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -13,15 +14,66 @@
                         <viewControllerLayoutGuide type="bottom" id="xb3-aO-Qok"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <animations/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PR2-Kb-dYz">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="333"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash_logo_chinese_icon" translatesAutoresizingMaskIntoConstraints="NO" id="u4T-Vv-Inm">
+                                        <rect key="frame" x="112" y="127" width="150" height="80"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="80" id="V21-qT-mkq"/>
+                                            <constraint firstAttribute="width" constant="150" id="tfU-L9-VF8"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="u4T-Vv-Inm" firstAttribute="centerY" secondItem="PR2-Kb-dYz" secondAttribute="centerY" id="J8a-v0-bK3"/>
+                                    <constraint firstItem="u4T-Vv-Inm" firstAttribute="centerX" secondItem="PR2-Kb-dYz" secondAttribute="centerX" id="sBO-V0-9dk"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xYg-n1-KqX">
+                                <rect key="frame" x="0.0" y="334" width="375" height="333"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="nice_logo" translatesAutoresizingMaskIntoConstraints="NO" id="WBe-k2-7jK">
+                                        <rect key="frame" x="112" y="127" width="150" height="80"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="80" id="4C8-dp-l4a"/>
+                                            <constraint firstAttribute="width" constant="150" id="FfH-w9-adu"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="WBe-k2-7jK" firstAttribute="centerX" secondItem="xYg-n1-KqX" secondAttribute="centerX" id="bKo-Lj-IKv"/>
+                                    <constraint firstItem="WBe-k2-7jK" firstAttribute="centerY" secondItem="xYg-n1-KqX" secondAttribute="centerY" id="jWb-WS-t4Y"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="0.82352941176470584" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="xYg-n1-KqX" secondAttribute="trailing" id="2dY-DD-FYn"/>
+                            <constraint firstItem="PR2-Kb-dYz" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="7xs-fR-Fm9"/>
+                            <constraint firstItem="PR2-Kb-dYz" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="UIB-J7-Tas"/>
+                            <constraint firstItem="xYg-n1-KqX" firstAttribute="top" secondItem="PR2-Kb-dYz" secondAttribute="bottom" constant="1" id="Um9-K3-XzN"/>
+                            <constraint firstAttribute="trailing" secondItem="PR2-Kb-dYz" secondAttribute="trailing" id="VHp-aE-Yvx"/>
+                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="xYg-n1-KqX" secondAttribute="bottom" id="ayr-fs-UFA"/>
+                            <constraint firstItem="xYg-n1-KqX" firstAttribute="height" secondItem="PR2-Kb-dYz" secondAttribute="height" id="g0U-OW-cM0"/>
+                            <constraint firstItem="xYg-n1-KqX" firstAttribute="width" secondItem="PR2-Kb-dYz" secondAttribute="width" id="lqu-SA-bRe"/>
+                            <constraint firstItem="xYg-n1-KqX" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="oEh-hp-it1"/>
+                        </constraints>
                     </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="53" y="375"/>
+            <point key="canvasLocation" x="-26.5" y="384.5"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="nice_logo" width="85" height="32"/>
+        <image name="splash_logo_chinese_icon" width="77" height="36"/>
+    </resources>
 </document>

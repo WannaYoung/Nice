@@ -14,9 +14,37 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
 
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Override point for customization after application launch.
+    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool
+    {
+        self.configAppUI()
+        
         return true
+    }
+    
+    func configAppUI()
+    {
+        self.window!.backgroundColor = UIColor.whiteColor()
+        
+        //表视图背景色
+        UITableView.appearance().backgroundColor = BACKGROUND_COLOR
+        
+        //返回按钮
+        let image:UIImage = UIImage(named: "goback")!
+        UINavigationBar.appearance().backIndicatorImage = image
+        UINavigationBar.appearance().backIndicatorTransitionMaskImage = image
+        var offset:UIOffset = UIOffsetZero
+        offset.horizontal = -500;
+        UIBarButtonItem.appearance().setBackButtonTitlePositionAdjustment(offset, forBarMetrics: UIBarMetrics.Default)
+        
+        //导航栏风格
+        UINavigationBar.appearance().translucent = true
+        UINavigationBar.appearance().titleTextAttributes = NSDictionary(objects: [NAV_TEXT_COLOR,UIFont.systemFontOfSize(18.0)], forKeys: [NSForegroundColorAttributeName,NSFontAttributeName]) as? [String : AnyObject]
+        UINavigationBar.appearance().barTintColor = UIColor.whiteColor()
+        
+//        Tabbar风格
+        UITabBar.appearance().tintColor = MAIN_COLOR
+        
+        UITabBarItem.appearance().setTitleTextAttributes(NSDictionary(objects: [COMMON_TEXT_COLOR], forKeys: [NSForegroundColorAttributeName]) as? [String : AnyObject], forState: UIControlState.Selected)
     }
 
     func applicationWillResignActive(application: UIApplication) {
