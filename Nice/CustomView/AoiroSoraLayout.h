@@ -19,7 +19,7 @@
 
 @end
 
-@interface AoiroSoraLayout : UICollectionViewFlowLayout
+@interface AoiroSoraLayout : UICollectionViewFlowLayout<UICollectionViewDelegateFlowLayout>
 /**
  *  列数
  */

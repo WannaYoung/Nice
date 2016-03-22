@@ -37,6 +37,7 @@
     [super prepareLayout];
     _columHeightAttay = [NSMutableArray arrayWithCapacity:_colNum];
     _attributeArray = [NSMutableArray array];
+    
     for (int index = 0; index < _colNum; index++)
     {
         _columHeightAttay[index] = @(_edgeInsets.top);
@@ -71,7 +72,9 @@
     
 }
 
-- (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
+- (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect
+{
+    
     NSMutableArray *resultArray = [NSMutableArray array];
     for (UICollectionViewLayoutAttributes *attributes in _attributeArray) {
         CGRect rect1 = attributes.frame;
@@ -115,5 +118,7 @@
     }];
     return minCol;
 }
+
+
 
 @end
