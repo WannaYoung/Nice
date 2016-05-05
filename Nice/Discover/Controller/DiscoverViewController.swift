@@ -7,16 +7,17 @@
 //
 
 import UIKit
+import SwiftyJSON
 import Alamofire
+import Kingfisher
 
-
-class DiscoverViewController: UICollectionViewController,AoiroSoraLayoutDelegate,UICollectionViewDelegateFlowLayout
+class DiscoverViewController: UICollectionViewController,UICollectionViewDelegateFlowLayout,WaterFlowLayoutDelegate
 {
     let heightArray:NSMutableArray = NSMutableArray()
     
     var photoArray:Array<JSON> = []
     
-    @IBOutlet weak var waterFlow: AoiroSoraLayout!
+    @IBOutlet weak var waterFlow: WaterFlowLayout!
 
     override func viewDidLoad()
     {
@@ -49,7 +50,7 @@ class DiscoverViewController: UICollectionViewController,AoiroSoraLayoutDelegate
     
     func getImageSize()
     {
-        for var i = 0 ;i < photoArray.count ;i++
+        for i in 0  ..< photoArray.count 
         {
             let photoDict = photoArray[i]
             let temp:Float = (Float(ScreenWidth) - Float(waterFlow.interSpace) * (Float(waterFlow.colNum) + 1.0)) / Float(waterFlow.colNum) / photoDict["width"].floatValue
@@ -77,9 +78,8 @@ class DiscoverViewController: UICollectionViewController,AoiroSoraLayoutDelegate
         return photoArray.count
     }
     
-    func itemHeightLayOut(layOut: AoiroSoraLayout!, indexPath: NSIndexPath!) -> CGFloat
+    func itemHeightLayOut(layout:WaterFlowLayout,indexPath:NSIndexPath) -> CGFloat
     {
-        
         return CGFloat(heightArray[indexPath.row] as! NSNumber)+50
     }
     
@@ -120,6 +120,8 @@ class DiscoverViewController: UICollectionViewController,AoiroSoraLayoutDelegate
     
     override func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView
     {
+        
+        
         let reusableView:UICollectionReusableView = collectionView.dequeueReusableSupplementaryViewOfKind(UICollectionElementKindSectionHeader, withReuseIdentifier: "header", forIndexPath: indexPath)
         
         

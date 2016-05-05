@@ -35,7 +35,7 @@ class TabViewController: UITabBarController,UIImagePickerControllerDelegate,UINa
         
         cameraBT.frame = CGRectMake(0, 0, customView.frame.size.width, customView.frame.size.height)
         
-        cameraBT.addTarget(self, action: "openCamera", forControlEvents: UIControlEvents.TouchUpInside)
+        cameraBT.addTarget(self, action: #selector(TabViewController.openCamera), forControlEvents: UIControlEvents.TouchUpInside)
 
         customView.addSubview(cameraBT)
         

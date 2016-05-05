@@ -20,7 +20,7 @@ extension UIImage
         let context:CGContextRef = UIGraphicsGetCurrentContext()!
         for window:UIWindow in UIApplication.sharedApplication().windows
         {
-            if !window.respondsToSelector("screen") || window.screen == UIScreen.mainScreen()
+            if !window.respondsToSelector(Selector("screen")) || window.screen == UIScreen.mainScreen()
             {
                 CGContextSaveGState(context)
                 CGContextTranslateCTM(context, window.center.x, window.center.y)
@@ -34,13 +34,16 @@ extension UIImage
         return image
     }
     
-    func gaussianBlur(var blurAmount:CGFloat) -> UIImage
+    func gaussianBlur(blurAmount:CGFloat) -> UIImage
     {
-        if (blurAmount < 0.0 || blurAmount > 1.0) {
-            blurAmount = 0.5
+        var tempAmount:CGFloat = blurAmount
+        
+        if (tempAmount < 0.0 || tempAmount > 1.0)
+        {
+            tempAmount = 0.5
         }
         
-        var boxSize = Int(blurAmount * 40)
+        var boxSize = Int(tempAmount * 40)
         boxSize = boxSize - (boxSize % 2) + 1
         
         let img = self.CGImage

@@ -30,7 +30,7 @@ class WaterFlowLayout: UICollectionViewFlowLayout
     {
         columHeightArray = NSMutableArray(capacity: colNum)
         
-        for var index = 0 ;index < colNum; index++
+        for index in 0  ..< colNum
         {
             columHeightArray[index] = edgeInsets.top
         }
@@ -42,7 +42,7 @@ class WaterFlowLayout: UICollectionViewFlowLayout
         let itemwidth:CGFloat = totalItemWidth / CGFloat(colNum)        //拿到每个分区所有item的个数
         let totalItems:NSInteger = (self.collectionView?.numberOfItemsInSection(0))!
         
-        for var i = 0 ;i < totalItems; i++
+        for i in 0  ..< totalItems
         {
             let currentCol:NSInteger = self.minCuttentCol()
             
@@ -51,10 +51,8 @@ class WaterFlowLayout: UICollectionViewFlowLayout
             
             let indexPath:NSIndexPath = NSIndexPath(forItem: i, inSection: 0)
             var itemHeight:CGFloat = 0.0
-            if ((delegate) != nil)
-            {
-                itemHeight = (delegate?.itemHeightLayOut(self, indexPath: indexPath))!
-            }
+            
+            itemHeight = (delegate?.itemHeightLayOut(self, indexPath: indexPath))!
             let frame:CGRect = CGRectMake(xPos, yPos, itemwidth, itemHeight)
             let attribute:UICollectionViewLayoutAttributes = UICollectionViewLayoutAttributes(forCellWithIndexPath: indexPath)
             attribute.frame = frame
@@ -80,13 +78,13 @@ class WaterFlowLayout: UICollectionViewFlowLayout
         return resultArray
     }
     
-//    override func collectionViewContentSize() -> CGSize
-//    {
-//        let width:CGFloat = self.collectionView!.frame.size.width
-//        let index:NSInteger = self.maxCuttentCol()
-//        let height:CGFloat = CGFloat(columHeightArray[index] as! NSNumber)
-//        return CGSizeMake(width, height)
-//    }
+    override func collectionViewContentSize() -> CGSize
+    {
+        let width:CGFloat = self.collectionView!.frame.size.width
+        let index:NSInteger = self.maxCuttentCol()
+        let height:CGFloat = CGFloat(columHeightArray[index] as! NSNumber)
+        return CGSizeMake(width, height)
+    }
     
     func configColNum(number:NSInteger)
     {
@@ -119,7 +117,7 @@ class WaterFlowLayout: UICollectionViewFlowLayout
     
     func maxCuttentCol() -> NSInteger
     {
-       let maxHeight:CGFloat = 0.0
+       var maxHeight:CGFloat = 0.0
        var maxIndex:NSInteger = 0
         
         for (index, _) in columHeightArray.enumerate()
@@ -127,6 +125,7 @@ class WaterFlowLayout: UICollectionViewFlowLayout
             let heightInArray:CGFloat = CGFloat(columHeightArray[index] as! NSNumber)
             if (heightInArray > maxHeight)
             {
+                maxHeight = heightInArray
                 maxIndex = index
             }
         }
@@ -138,14 +137,15 @@ class WaterFlowLayout: UICollectionViewFlowLayout
     //每次取最小y的列
     func minCuttentCol() -> NSInteger
     {
-        let minHeight:CGFloat = CGFloat(MAXFLOAT)
+        var minHeight:CGFloat = CGFloat(MAXFLOAT)
         var minIndex:NSInteger = 0
         
         for (index, _) in columHeightArray.enumerate()
         {
             let heightInArray:CGFloat = CGFloat(columHeightArray[index] as! NSNumber)
-            if (heightInArray > minHeight)
+            if (heightInArray < minHeight)
             {
+                minHeight = heightInArray
                 minIndex = index
             }
         }

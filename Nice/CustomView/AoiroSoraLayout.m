@@ -74,7 +74,6 @@
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect
 {
-    
     NSMutableArray *resultArray = [NSMutableArray array];
     for (UICollectionViewLayoutAttributes *attributes in _attributeArray) {
         CGRect rect1 = attributes.frame;
