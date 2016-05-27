@@ -13,7 +13,7 @@ import Kingfisher
 
 class DiscoverViewController: UICollectionViewController,UICollectionViewDelegateFlowLayout,WaterFlowLayoutDelegate
 {
-    let heightArray:NSMutableArray = NSMutableArray()
+    var heightArray:NSArray = NSArray()
     
     var photoArray:Array<JSON> = []
     
@@ -29,18 +29,15 @@ class DiscoverViewController: UICollectionViewController,UICollectionViewDelegat
         waterFlow.colNum = 2
         waterFlow.delegate = self
         
-                
-        Alamofire.request(.GET, "https://api.500px.com/v1/photos",parameters: ["consumer_key": "nv5jGhAEGAdqRKQHhDAUuVx9S90DSLdltS8hpidb","image_size": "20","only": "Wedding"]).responseJSON
-            { (response) -> Void in
-                let json = JSON(response.result.value!)
-                self.photoArray = json["photos"].arrayValue
-                self.getImageSize()
-                self.collectionView?.reloadData()
-                
-                Alamofire.request(.GET, "https://api.500px.com/v1/photos",parameters: ["consumer_key": "nv5jGhAEGAdqRKQHhDAUuVx9S90DSLdltS8hpidb","image_size": "1080","only": "Wedding"]).responseJSON
-                    { (response) -> Void in
-                }
+        
+        WebManager.shareManager.requestWithMethod(.GET, urlString: HOME_URL, parameters: ["image_size": "20","only": "Wedding"])
+        { (json, error) in
+            
+            self.photoArray = json["photos"].arrayValue
+            self.heightArray = CommonMethod.shareMethod.getImageSize(self.photoArray, waterFlow: self.waterFlow)
+            self.collectionView?.reloadData()
         }
+        
     }
     
     override func didReceiveMemoryWarning()
@@ -48,22 +45,7 @@ class DiscoverViewController: UICollectionViewController,UICollectionViewDelegat
         super.didReceiveMemoryWarning()
     }
     
-    func getImageSize()
-    {
-        for i in 0  ..< photoArray.count 
-        {
-            let photoDict = photoArray[i]
-            let temp:Float = (Float(ScreenWidth) - Float(waterFlow.interSpace) * (Float(waterFlow.colNum) + 1.0)) / Float(waterFlow.colNum) / photoDict["width"].floatValue
-            let itemHeight:Float = photoDict["height"].floatValue * temp
-            
-            let number:NSNumber = NSNumber(float: itemHeight)
-            
-            heightArray.addObject(number)
-        }
-        
-        
-        
-    }
+    
     
     // MARK: UICollectionViewDataSource
     
@@ -82,9 +64,6 @@ class DiscoverViewController: UICollectionViewController,UICollectionViewDelegat
     {
         return CGFloat(heightArray[indexPath.row] as! NSNumber)+50
     }
-    
-    
-    
     
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell
     {
