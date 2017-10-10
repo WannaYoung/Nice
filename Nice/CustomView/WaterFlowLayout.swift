@@ -8,10 +8,9 @@
 
 import UIKit
 
-
 protocol WaterFlowLayoutDelegate
 {
-    func itemHeightLayOut(layout:WaterFlowLayout,indexPath:NSIndexPath) -> CGFloat
+    func itemHeightLayOut(layout:WaterFlowLayout,indexPath:IndexPath) -> CGFloat
 }
 
 class WaterFlowLayout: UICollectionViewFlowLayout
@@ -26,7 +25,7 @@ class WaterFlowLayout: UICollectionViewFlowLayout
     var delegate:WaterFlowLayoutDelegate?
     
     
-    override func prepareLayout()
+    override func prepare()
     {
         columHeightArray = NSMutableArray(capacity: colNum)
         
@@ -40,36 +39,35 @@ class WaterFlowLayout: UICollectionViewFlowLayout
         let totalItemWidth:CGFloat = totalWidth - edgeInsets.left - edgeInsets.right - interSpace * CGFloat(colNum-1)
         //每个item
         let itemwidth:CGFloat = totalItemWidth / CGFloat(colNum)        //拿到每个分区所有item的个数
-        let totalItems:NSInteger = (self.collectionView?.numberOfItemsInSection(0))!
+        let totalItems:NSInteger = (self.collectionView?.numberOfItems(inSection: 0))!
         
         for i in 0  ..< totalItems
         {
             let currentCol:NSInteger = self.minCuttentCol()
             
             let xPos:CGFloat = edgeInsets.left + (itemwidth + interSpace) * CGFloat(currentCol)
-            let yPos:CGFloat = CGFloat(columHeightArray[currentCol] as! NSNumber)
+            let yPos:CGFloat = CGFloat(truncating: columHeightArray[currentCol] as! NSNumber)
             
-            let indexPath:NSIndexPath = NSIndexPath(forItem: i, inSection: 0)
+            let indexPath:IndexPath = IndexPath(item: i, section: 0)
             var itemHeight:CGFloat = 0.0
-            
-            itemHeight = (delegate?.itemHeightLayOut(self, indexPath: indexPath))!
-            let frame:CGRect = CGRectMake(xPos, yPos, itemwidth, itemHeight)
-            let attribute:UICollectionViewLayoutAttributes = UICollectionViewLayoutAttributes(forCellWithIndexPath: indexPath)
+            itemHeight = (delegate?.itemHeightLayOut(layout: self, indexPath: indexPath))!
+            let frame:CGRect = CGRect(x: xPos, y: yPos, width: itemwidth, height: itemHeight)
+            let attribute:UICollectionViewLayoutAttributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
             attribute.frame = frame
-            attributeArray.addObject(attribute)
-            let upDateY:CGFloat = CGFloat(columHeightArray[currentCol] as! NSNumber) + itemHeight + interSpace
+            attributeArray.add(attribute)
+            let upDateY:CGFloat = CGFloat(truncating: columHeightArray[currentCol] as! NSNumber) + itemHeight + interSpace
             columHeightArray[currentCol] = upDateY
         }
     }
     
-    override func layoutAttributesForElementsInRect(rect: CGRect) -> [UICollectionViewLayoutAttributes]?
+    override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]?
     {
         var resultArray = [UICollectionViewLayoutAttributes]()
         
         for attributes in attributeArray
         {
             let rect1:CGRect = (attributes as! UICollectionViewLayoutAttributes).frame
-            if(CGRectIntersectsRect(rect1, rect))
+            if(rect1.intersects(rect))
             {
                 resultArray.append(attributes as! UICollectionViewLayoutAttributes)
             }
@@ -78,12 +76,11 @@ class WaterFlowLayout: UICollectionViewFlowLayout
         return resultArray
     }
     
-    override func collectionViewContentSize() -> CGSize
-    {
+    override var collectionViewContentSize: CGSize {
         let width:CGFloat = self.collectionView!.frame.size.width
         let index:NSInteger = self.maxCuttentCol()
-        let height:CGFloat = CGFloat(columHeightArray[index] as! NSNumber)
-        return CGSizeMake(width, height)
+        let height:CGFloat = CGFloat(truncating: columHeightArray[index] as! NSNumber)
+        return CGSize(width: width, height: height)
     }
     
     func configColNum(number:NSInteger)
@@ -120,9 +117,9 @@ class WaterFlowLayout: UICollectionViewFlowLayout
        var maxHeight:CGFloat = 0.0
        var maxIndex:NSInteger = 0
         
-        for (index, _) in columHeightArray.enumerate()
+        for (index, _) in columHeightArray.enumerated()
         {
-            let heightInArray:CGFloat = CGFloat(columHeightArray[index] as! NSNumber)
+            let heightInArray:CGFloat = CGFloat(truncating: columHeightArray[index] as! NSNumber)
             if (heightInArray > maxHeight)
             {
                 maxHeight = heightInArray
@@ -140,9 +137,9 @@ class WaterFlowLayout: UICollectionViewFlowLayout
         var minHeight:CGFloat = CGFloat(MAXFLOAT)
         var minIndex:NSInteger = 0
         
-        for (index, _) in columHeightArray.enumerate()
+        for (index, _) in columHeightArray.enumerated()
         {
-            let heightInArray:CGFloat = CGFloat(columHeightArray[index] as! NSNumber)
+            let heightInArray:CGFloat = CGFloat(truncating: columHeightArray[index] as! NSNumber)
             if (heightInArray < minHeight)
             {
                 minHeight = heightInArray

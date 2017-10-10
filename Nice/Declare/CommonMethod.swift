@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SwiftyJSON
 
 class CommonMethod: NSObject
 {
@@ -15,22 +14,16 @@ class CommonMethod: NSObject
     
     private override init(){ }
     
-    func getImageSize(photoArray:Array<JSON>,waterFlow:WaterFlowLayout) -> NSArray
-    {
-        let tempArray:NSMutableArray = NSMutableArray()
-
-        for i in 0  ..< photoArray.count
-        {
+    func getImageSize(photoArray: [Photo],waterFlow:WaterFlowLayout) -> [CGFloat] {
+        var tempArray: [CGFloat] = []
+        for i in 0  ..< photoArray.count {
             let photoDict = photoArray[i]
-            let temp:Float = (Float(ScreenWidth) - Float(waterFlow.interSpace) * (Float(waterFlow.colNum) + 1.0)) / Float(waterFlow.colNum) / photoDict["width"].floatValue
-            let itemHeight:Float = photoDict["height"].floatValue * temp
-            let number:NSNumber = NSNumber(float: itemHeight)
-            
-            tempArray.addObject(number)
-            
+            let temp = (ScreenWidth - waterFlow.interSpace * CGFloat(waterFlow.colNum + 1)) / CGFloat(waterFlow.colNum) / photoDict.width
+            let itemHeight = photoDict.height * temp
+            tempArray.append(itemHeight)
         }
         
-        return tempArray.copy() as! NSArray
+        return tempArray
 
     }
     

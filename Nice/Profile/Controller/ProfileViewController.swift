@@ -23,14 +23,12 @@ class ProfileViewController: UITableViewController {
 
     // MARK: - Table view delegate
     
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat
-    {
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return section == 0 ? 14.0 : 13.0
     }
 
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath)
-    {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
 }

@@ -9,6 +9,8 @@
 import UIKit
 
 let CONSUMER_KEY = "nv5jGhAEGAdqRKQHhDAUuVx9S90DSLdltS8hpidb"
-let HOME_URL = "https://api.500px.com/v1/photos"
+let HOMEURL = "https://api.500px.com"
+
+let PHOTOAPI = "/v1/photos"
     
 

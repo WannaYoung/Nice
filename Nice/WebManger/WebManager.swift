@@ -7,31 +7,32 @@
 //
 
 import UIKit
-import Alamofire
-import SwiftyJSON
+import Networking
+import HandyJSON
 
-class WebManager: NSObject
-{
-    static let shareManager = WebManager()
+class WebManager: NSObject {
     
+    static let share = WebManager()
     private override init(){ }
-
-    func requestWithMethod(method:Alamofire.Method,urlString:String,parameters:NSDictionary,completionHandler:(JSON!,NSError!) -> Void)
-    {
-        let tempDict:NSMutableDictionary = parameters.mutableCopy() as! NSMutableDictionary
-        tempDict.setObject(CONSUMER_KEY, forKey: "consumer_key")
-        let para: [String : AnyObject] = tempDict.copy() as! [String : AnyObject]
+    
+    //MARK: - Http GET Method
+    func getDataWith<T: HandyJSON>(path: String, parama: [String: String], successHandler: @escaping (T) -> Swift.Void, failureHandler: ((NSError) -> Swift.Void)? = nil) {
         
-        Alamofire.request(method, urlString,parameters: para).responseJSON
-            { (response) -> Void in
-                
-                let json = JSON(response.result.value!)
-                
-                completionHandler(json,response.result.error)
-                
+        var vParama = parama
+        vParama["consumer_key"] = CONSUMER_KEY
+        let networking = Networking(baseURL: HOMEURL)
+        networking.get(path, parameters: vParama ) { (result) in
+            switch result {
+            case .success(let successResponse):
+                if let getData = T.deserialize(from: successResponse.dictionaryBody) {
+                    successHandler(getData)
+                }
+                break
+            case .failure(let failureResponse):
+                failureHandler?(failureResponse.error)
+                break
             }
+        }
     }
-
-    
-    
 }
+

@@ -14,22 +14,21 @@ extension UIImage
 {
     class func screenshot() -> UIImage
     {
-        let imageSize:CGSize = UIScreen.mainScreen().bounds.size
+        let imageSize:CGSize = UIScreen.main.bounds.size
         
         UIGraphicsBeginImageContextWithOptions(imageSize, false, 0)
-        let context:CGContextRef = UIGraphicsGetCurrentContext()!
-        for window:UIWindow in UIApplication.sharedApplication().windows
-        {
-            if !window.respondsToSelector(Selector("screen")) || window.screen == UIScreen.mainScreen()
+        let context:CGContext = UIGraphicsGetCurrentContext()!
+        for window:UIWindow in UIApplication.shared.windows {
+            if window.screen == UIScreen.main
             {
-                CGContextSaveGState(context)
-                CGContextTranslateCTM(context, window.center.x, window.center.y)
-                CGContextConcatCTM(context, window.transform)
-                CGContextTranslateCTM(context, -window.bounds.size.width * window.layer.anchorPoint.x, -window.bounds.size.height * window.layer.anchorPoint.y)
-                window.layer.renderInContext(context)
+                context.saveGState()
+                context.translateBy(x: window.center.x, y: window.center.y)
+                context.concatenate(window.transform)
+                context.translateBy(x: -window.bounds.size.width * window.layer.anchorPoint.x, y: -window.bounds.size.height * window.layer.anchorPoint.y)
+                window.layer.render(in: context)
             }
         }
-        let image:UIImage = UIGraphicsGetImageFromCurrentImageContext()
+        let image:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
         return image
     }
@@ -46,24 +45,24 @@ extension UIImage
         var boxSize = Int(tempAmount * 40)
         boxSize = boxSize - (boxSize % 2) + 1
         
-        let img = self.CGImage
+        let img = self.cgImage
         
         var inBuffer = vImage_Buffer()
         var outBuffer = vImage_Buffer()
         
-        let inProvider =  CGImageGetDataProvider(img)
-        let inBitmapData =  CGDataProviderCopyData(inProvider)
+        let inProvider =  img?.dataProvider
+        let inBitmapData =  inProvider?.data
         
-        inBuffer.width = vImagePixelCount(CGImageGetWidth(img))
-        inBuffer.height = vImagePixelCount(CGImageGetHeight(img))
-        inBuffer.rowBytes = CGImageGetBytesPerRow(img)
-        inBuffer.data = UnsafeMutablePointer<Void>(CFDataGetBytePtr(inBitmapData))
+        inBuffer.width = vImagePixelCount(img!.width)
+        inBuffer.height = vImagePixelCount(img!.height)
+        inBuffer.rowBytes = (img?.bytesPerRow)!
+        inBuffer.data = UnsafeMutableRawPointer(mutating: CFDataGetBytePtr(inBitmapData))
         
-        let pixelBuffer = malloc(CGImageGetBytesPerRow(img) * CGImageGetHeight(img))
+        let pixelBuffer = malloc((img?.bytesPerRow)! * (img?.height)!)
         
-        outBuffer.width = vImagePixelCount(CGImageGetWidth(img))
-        outBuffer.height = vImagePixelCount(CGImageGetHeight(img))
-        outBuffer.rowBytes = CGImageGetBytesPerRow(img)
+        outBuffer.width = vImagePixelCount(img!.width)
+        outBuffer.height = vImagePixelCount(img!.height)
+        outBuffer.rowBytes = (img?.bytesPerRow)!
         outBuffer.data = pixelBuffer
         
         var error = vImageBoxConvolve_ARGB8888(&inBuffer,
@@ -83,18 +82,18 @@ extension UIImage
         }
         
         let colorSpace =  CGColorSpaceCreateDeviceRGB()
-        let ctx = CGBitmapContextCreate(outBuffer.data,
-            Int(outBuffer.width),
-            Int(outBuffer.height),
-            8,
-            outBuffer.rowBytes,
-            colorSpace,
-            CGImageAlphaInfo.PremultipliedLast.rawValue)
+        let ctx = CGContext(data: outBuffer.data,
+                            width: Int(outBuffer.width),
+                            height: Int(outBuffer.height),
+                            bitsPerComponent: 8,
+                            bytesPerRow: outBuffer.rowBytes,
+                            space: colorSpace,
+                            bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)
         
-        let imageRef = CGBitmapContextCreateImage(ctx)
+        let imageRef = ctx!.makeImage()
         
         free(pixelBuffer)
-        return UIImage(CGImage: imageRef!)
+        return UIImage(cgImage: imageRef!)
     }
 
 

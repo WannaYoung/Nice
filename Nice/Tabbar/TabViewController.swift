@@ -25,32 +25,33 @@ class TabViewController: UITabBarController,UIImagePickerControllerDelegate,UINa
     
     func setupTabbar()
     {
-        let customView:UIView = UIView(frame:CGRectMake(ScreenWidth/5*2, 0, ScreenWidth/5, tabBar.frame.size.height) )
+        
+        let customView:UIView = UIView(frame:CGRect(x: ScreenWidth/5*2, y: 0, width: ScreenWidth/5, height: tabBar.frame.size.height) )
                 
-        customView.backgroundColor = UIColor.clearColor()
+        customView.backgroundColor = UIColor.clear
         
-        let cameraBT:UIButton = UIButton(type: UIButtonType.Custom)
+        let cameraBT:UIButton = UIButton(type: UIButtonType.custom)
         
-        cameraBT.setImage(UIImage(named: "tabbar_Camera_icon"), forState: UIControlState.Normal)
+        cameraBT.setImage(UIImage(named: "tabbar_Camera_icon"), for: UIControlState.normal)
         
-        cameraBT.frame = CGRectMake(0, 0, customView.frame.size.width, customView.frame.size.height)
+        cameraBT.frame = CGRect(x: 0, y: 0, width: customView.frame.size.width, height: customView.frame.size.height)
         
-        cameraBT.addTarget(self, action: #selector(TabViewController.openCamera), forControlEvents: UIControlEvents.TouchUpInside)
+        cameraBT.addTarget(self, action: #selector(TabViewController.openCamera), for: UIControlEvents.touchUpInside)
 
         customView.addSubview(cameraBT)
         
         tabBar.addSubview(customView)
     }
     
-    func openCamera()
+    @objc func openCamera()
     {
         //先设定sourceType为相机，然后判断相机是否可用（ipod）没相机，不可用将sourceType设定为相片库
         
-        var sourceType = UIImagePickerControllerSourceType.Camera
+        var sourceType = UIImagePickerControllerSourceType.camera
         
-        if !UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)
+        if !UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera)
         {
-            sourceType = UIImagePickerControllerSourceType.PhotoLibrary
+            sourceType = UIImagePickerControllerSourceType.photoLibrary
         }
         
         let picker:UIImagePickerController = UIImagePickerController()
@@ -61,7 +62,7 @@ class TabViewController: UITabBarController,UIImagePickerControllerDelegate,UINa
         
         picker.sourceType = sourceType
         
-        self.presentViewController(picker, animated: true, completion: nil)
+        self.present(picker, animated: true, completion: nil)
         
     }
     
@@ -70,13 +71,13 @@ class TabViewController: UITabBarController,UIImagePickerControllerDelegate,UINa
     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?)
     {
         
-        picker.dismissViewControllerAnimated(true, completion: nil)
+        picker.dismiss(animated: true, completion: nil)
         
     }
     
-    func imagePickerControllerDidCancel(picker: UIImagePickerController)
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController)
     {
-        picker.dismissViewControllerAnimated(true, completion: nil)
+        picker.dismiss(animated: true, completion: nil)
         
     }
     
