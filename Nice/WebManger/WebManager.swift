@@ -17,11 +17,8 @@ class WebManager: NSObject {
     
     //MARK: - Http GET Method
     func getDataWith<T: HandyJSON>(path: String, parama: [String: String], successHandler: @escaping (T) -> Swift.Void, failureHandler: ((NSError) -> Swift.Void)? = nil) {
-        
-        var vParama = parama
-        vParama["consumer_key"] = CONSUMER_KEY
         let networking = Networking(baseURL: HOMEURL)
-        networking.get(path, parameters: vParama ) { (result) in
+        networking.get(path, parameters: parama ) { (result) in
             switch result {
             case .success(let successResponse):
                 if let getData = T.deserialize(from: successResponse.dictionaryBody) {

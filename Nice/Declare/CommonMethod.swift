@@ -14,17 +14,10 @@ class CommonMethod: NSObject
     
     private override init(){ }
     
-    func getImageSize(photoArray: [Photo],waterFlow:WaterFlowLayout) -> [CGFloat] {
-        var tempArray: [CGFloat] = []
-        for i in 0  ..< photoArray.count {
-            let photoDict = photoArray[i]
-            let temp = (ScreenWidth - waterFlow.interSpace * CGFloat(waterFlow.colNum + 1)) / CGFloat(waterFlow.colNum) / photoDict.width
-            let itemHeight = photoDict.height * temp
-            tempArray.append(itemHeight)
-        }
-        
-        return tempArray
-
+    func getImageHeight(result: SearchResult, waterFlow:WaterFlowLayout) -> CGFloat {
+        let temp = (ScreenWidth - waterFlow.interSpace * CGFloat(waterFlow.colNum + 1)) / CGFloat(waterFlow.colNum) / CGFloat(result.width)
+        let itemHeight = CGFloat(result.height) * temp
+        return itemHeight
     }
     
     

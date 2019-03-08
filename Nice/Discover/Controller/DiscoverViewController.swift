@@ -11,8 +11,7 @@ import Kingfisher
 
 class DiscoverViewController: UICollectionViewController,UICollectionViewDelegateFlowLayout,WaterFlowLayoutDelegate
 {
-    var heightArray: [CGFloat] = []
-    var photoArray:[Photo] = []
+    var unsplashSearch = UnsplashSearch()
     
     @IBOutlet weak var waterFlow: WaterFlowLayout!
 
@@ -35,9 +34,8 @@ class DiscoverViewController: UICollectionViewController,UICollectionViewDelegat
     }
     
     func getDiscoveryPhotos() {
-        WebManager.share.getDataWith(path: PHOTOAPI, parama: ["image_size": "20","only":"Sport"], successHandler: { (discover: Discovery) in
-            self.photoArray = discover.photos
-            self.heightArray = CommonMethod.shareMethod.getImageSize(photoArray: self.photoArray, waterFlow: self.waterFlow)
+        WebManager.share.getDataWith(path: PHOTOAPI, parama: ["client_id": CONSUMER_KEY, "query": "love", "page": "1", "per_page": "10", "orientation": "portrait"], successHandler: { (search: UnsplashSearch) in
+            self.unsplashSearch = search
             self.collectionView?.reloadData()
         }) { (error) in
             
@@ -50,15 +48,15 @@ class DiscoverViewController: UICollectionViewController,UICollectionViewDelegat
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return photoArray.count
+        return unsplashSearch.results.count
     }
     
     func itemHeightLayOut(layout:WaterFlowLayout,indexPath:IndexPath) -> CGFloat {
-        return heightArray[indexPath.row]+50
+        return CommonMethod.shareMethod.getImageHeight(result: unsplashSearch.results[indexPath.row], waterFlow: waterFlow)+50
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let photoDict = photoArray[indexPath.row]
+        let result = unsplashSearch.results[indexPath.row]
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "discover", for: indexPath)
         
         let pic:UIImageView = cell.viewWithTag(10) as! UIImageView
@@ -70,11 +68,12 @@ class DiscoverViewController: UICollectionViewController,UICollectionViewDelegat
         name.text = ""
         date.text = ""
         
-        pic.kf.setImage(with: URL(string: photoDict.image_url))
-        avator.kf.setImage(with: URL(string: photoDict.user.avatars.default["https"] ?? ""))
+        let endIndex = result.created_at.index(result.created_at.startIndex, offsetBy: 10)
         
-        name.text = photoDict.user.fullname
-        date.text = photoDict.description
+        pic.kf.setImage(with: URL(string: result.urls.small))
+        avator.kf.setImage(with: URL(string: result.user.profile_image.medium))
+        name.text = result.user.name
+        date.text = String(result.created_at[result.created_at.startIndex..<endIndex])
         
         return cell
     }
